@@ -1,0 +1,10 @@
+{
+    "anchor": "18000000000",
+    "num_tranches": "16",
+    "supply": "24000000",
+    "supply_percent_hths": "4000",
+    "init_tranches_size": "600000000",
+    "lookback": "4",
+    "min_tranche_size": "1",
+    "auction_duration": "60"
+}
