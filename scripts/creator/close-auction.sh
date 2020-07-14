@@ -40,7 +40,7 @@ fi
 # TODO parameterize out indexer URL
 ACCOUNTS=($(curl "localhost:8980/v2/transactions?address=${ESCROW}&asset-id=${USDC_ID}&min-round=${HEAD_RND}&max-round=${TAIL_RND}" | jq .transactions | jq "map(.sender)" | jq -r 'join(" ")'))
 
-RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .rc.ui)
+RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.rc.ui + 0')
 while [ 0 -lt $RECEIPTS_LEFT ]; do
     for acct in "${ACCOUNTS[@]}"; do
 	echo $acct
@@ -53,7 +53,7 @@ while [ 0 -lt $RECEIPTS_LEFT ]; do
     wait
 
     goal node wait
-    RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .rc.ui)
+    RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.rc.ui + 0')
 done
 
 goal clerk send -o ${TEMPDIR}/closer0.tx -a 1 --from ${FROM} --to ${ESCROW}
@@ -74,3 +74,6 @@ goal clerk sign -i ${TEMPDIR}/closeg-4.tx -o ${TEMPDIR}/closes4.stx -p ${ESCROW_
 
 cat ${TEMPDIR}/closes*.stx > ${TEMPDIR}/close.stx
 goal clerk rawsend -f ${TEMPDIR}/close.stx
+
+rm "${DIR}/head-round"
+rm "${DIR}/tail-round"

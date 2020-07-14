@@ -6,5 +6,5 @@
     "init_tranches_size": "600000000",
     "lookback": "4",
     "min_tranche_size": "1",
-    "auction_duration": "60"
+    "auction_duration": "50"
 }

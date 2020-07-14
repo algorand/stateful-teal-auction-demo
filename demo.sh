@@ -28,4 +28,9 @@ while [ $TRANCHE_INDEX -lt $NUM_TRANCHES ]; do
     TRANCHE_INDEX=$(goal app read --app-id ${APP_ID} --global --guess-format | jq '.ti.ui + 0')
 done
 
+ESCROW=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .es.tb)
+
+mkdir $AUCTION_ROOT/results
+./statfile.sh "${ESCROW}" "$AUCTION_ROOT/results/bids.json" "$AUCTION_ROOT/results/sales.json"
+
 ./shutdown-auction-series.sh
