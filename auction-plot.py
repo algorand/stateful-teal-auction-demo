@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser(description='plot results of an auction')
 
 parser.add_argument('bidfile', help='JSON file containing bid token txns in escrow')
 parser.add_argument('salesfile', help='JSON file containing sale token txns in escrow')
+parser.add_argument('outfile', help='Output image file')
 
 args = parser.parse_args()
 
@@ -84,28 +85,23 @@ for b in bids:
 
     print(str(b))
 
-# plt.hist(ys0, 10000, histtype='stepfilled', cumulative=True)
-
-# plt.hist(
 plt.plot(xs0, ys0, 'x', label='Bid (USDC)')
 
 X = sorted(zip(xs0, ys0), key=lambda a: a[0])
 integrated = {}
+total = 0
 for x in X:
-    if x[0] not in integrated:
-        integrated[x[0]] = 0
-    integrated[x[0]] += x[1]
+    total += x[1]
+    integrated[x[0]] = total
 
 Y = []
 for k in integrated:
-    Y.append((k, integrated[k]))
+    Y.append((k, integrated[k] / 10))
 
 Y = sorted(Y, key=lambda a: a[0])
 xs2, ys2 = zip(*Y)
 
-plt.plot(xs2, ys2, '*', label='Auction revenue (USDC)')
-
-# plt.plot(xs1, ys1, 'x')
+plt.plot(xs2, ys2, '-', label='Auction revenue (USDC/10)')
 
 print(len(salestxns))
 
@@ -129,4 +125,4 @@ plt.plot(xs1, ys1, 'o', label='Tranche size (Token)')
 plt.xlabel('UNIX time')
 plt.ylabel('Units')
 plt.legend()
-plt.show()
+plt.savefig(args.outfile)
