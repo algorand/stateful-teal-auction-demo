@@ -37,11 +37,15 @@ goal asset send -a 0 --assetid ${SOV_ID} --from ${FROM} --to ${FROM}
 # enter bid
 
 goal asset send -o ${TEMPDIR}/bidr0.tx -a ${AMOUNT} --assetid ${USDC_ID} -t ${ESCROW} -f ${FROM}
-goal app call -o ${TEMPDIR}/bidr1.tx --app-id ${APP_ID} --from ${FROM}
+goal app call   -o ${TEMPDIR}/bidr1.tx --app-id ${APP_ID} --from ${FROM}
+
 cat ${TEMPDIR}/bid*.tx > ${TEMPDIR}/bidc.tx
+
 goal clerk group -i ${TEMPDIR}/bidc.tx -o ${TEMPDIR}/bidrg.tx
 goal clerk split -i ${TEMPDIR}/bidrg.tx -o ${TEMPDIR}/bidg.tx
+
 goal clerk sign -i ${TEMPDIR}/bidg-0.tx -o ${TEMPDIR}/bids0.stx
 goal clerk sign -i ${TEMPDIR}/bidg-1.tx -o ${TEMPDIR}/bids1.stx
+
 cat ${TEMPDIR}/bids*.stx > ${TEMPDIR}/bid.stx
 goal clerk rawsend -f ${TEMPDIR}/bid.stx

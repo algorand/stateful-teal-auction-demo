@@ -13,9 +13,9 @@ fi
 # 10 000.000 000 = $10K
 
 (
-    "${AUCTION_ROOT}/alice/scripts/enter-bid.sh" 10000000000 || kill 0 &
-    "${AUCTION_ROOT}/bob/scripts/enter-bid.sh" 20000000000 || kill 0 &
-    "${AUCTION_ROOT}/carol/scripts/enter-bid.sh" 30000000000 || kill 0 &
-    "${AUCTION_ROOT}/dave/scripts/enter-bid.sh" 15000000000 || kill 0 &
+    "${AUCTION_ROOT}/alice/scripts/enter-bid.sh" 10000000000 &
+    "${AUCTION_ROOT}/bob/scripts/enter-bid.sh" 20000000000 &
+    "${AUCTION_ROOT}/carol/scripts/enter-bid.sh" 30000000000 &
+    "${AUCTION_ROOT}/dave/scripts/enter-bid.sh" 15000000000 &
     wait
 )

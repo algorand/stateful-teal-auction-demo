@@ -42,6 +42,12 @@ AUCTION_DURATION=$(jq -r '.auction_duration' < "${DIR}/parameters.json")
 
 ESCROW=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .es.tb)
 
+RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.rc.ui + 0')
+if [ 0 -lt $RECEIPTS_LEFT ]; then
+    echo "Cannot start a new auction: the previous auction has not closed yet."
+    exit 1
+fi
+
 # TODO switch correctly depending on tranche number
 
 goal clerk send -o ${TEMPDIR}/openr0.tx -a 100000000 -f ${FROM} -t ${ESCROW}

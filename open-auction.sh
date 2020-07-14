@@ -10,8 +10,6 @@ then
     false
 fi
 
-# TODO close previous auction if not done yet
-
 # prepare and sign group transactions as administrator
 "${AUCTION_ROOT}/creator/scripts/open-auction-txn.sh" "${AUCTION_ROOT}/chan/open-auction-seller.tx"
 

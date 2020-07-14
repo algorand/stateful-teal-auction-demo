@@ -1,5 +1,18 @@
 These scripts assume that `goal` is in your $PATH and that $ALGORAND_DATA is set correctly.
 
+# Non-interactive demo
+
+Run
+
+```
+$ ./demo.sh
+```
+
+This will create a 16-tranche auction with a lookback of 4.
+(These parameters and others are specified in default-parameters.json.)
+This will launch the auction and have four bidders continually bid
+until the auction terminates.
+
 # Interactive Demo
 
 To set everything up,
@@ -49,7 +62,7 @@ $ ./close-auction.sh
 Once all auctions have completed, clean up auction state with
 
 ```
-$ ./destroy-auction.sh
+$ ./shutdown-auction-series.sh
 ```
 
 
@@ -71,3 +84,7 @@ This application ID must be given to all bidders so that they know where to bid.
 
 open-auction-txn.sh and open-auction-bcast.sh rely on the seller
 to sign a transaction which funds the auction.
+
+discharge-bid.sh relies on access to the escrow script.
+After the auction series has started, and the application ID is known,
+anyone can derive this script similarly to setup-env.sh.

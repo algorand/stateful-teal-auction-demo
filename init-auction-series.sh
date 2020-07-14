@@ -14,6 +14,6 @@ echo "Initializing auction application using parameters at $AUCTION_ROOT/paramet
 
 APP_ID=$("$AUCTION_ROOT/creator/scripts/create-auction-series.sh" $(cat "$AUCTION_ROOT/seller/addr") | tail -n 1 | cut -d ' ' -f 6)
 
-echo "Creation script returned app ID ${APP_ID}."
-
 echo "${APP_ID}" > "$AUCTION_ROOT/refs/app"
+
+echo "Creation script returned app ID ${APP_ID}."
