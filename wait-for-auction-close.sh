@@ -10,7 +10,5 @@ then
     false
 fi
 
-# TODO close previous auction if not done yet
-
 # prepare and sign group transactions as administrator
 "${AUCTION_ROOT}/creator/refs/scripts/wait-for-auction-close.sh"

@@ -11,7 +11,7 @@ APP_ID=$(cat "${DIR}/app")
 
 DEADLINE=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .ad.ui)
 
-# TODO this assumes that blockchain timestamp is near realtime;
+# TODO this assumes that blockchain timestamp is near local wall clock;
 # use block header timestamp instead for better accuracy
 
 while [ $(date '+%s') -le $DEADLINE ]; do

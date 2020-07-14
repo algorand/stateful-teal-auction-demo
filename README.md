@@ -74,8 +74,7 @@ There are several assumptions about the environment:
 2. Making the application source code hashes available to bidders.
 3. Having the seller opt into the bid token.
 4. Funding the bidders with the bid token.
-5. The auction administrator needs access to a node data directory
-   (TODO or an indexer service).
+5. The auction administrator needs access to an indexer service.
 
 setup-env.sh initializes these in the demo.
 
