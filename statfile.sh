@@ -28,6 +28,6 @@ if [ "$3" == "" ]; then
 fi
 SELLFILE=$3
 
-curl "localhost:8980/v2/transactions?address=${ESCROW}&asset-id=${USDC_ID}" > ${BIDFILE}
-curl "localhost:8980/v2/transactions?address=${ESCROW}&asset-id=${SOV_ID}" > ${SELLFILE}
+curl "${INDEXER_URL}/v2/transactions?address=${ESCROW}&asset-id=${USDC_ID}" > ${BIDFILE}
+curl "${INDEXER_URL}/v2/transactions?address=${ESCROW}&asset-id=${SOV_ID}" > ${SELLFILE}
 

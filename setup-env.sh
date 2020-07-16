@@ -3,25 +3,41 @@
 set -exm
 set -o pipefail
 
-# initialize escrow
-
 mkdir tmp || true
+
+# start up the node and the indexer
+goal node start
+nohup algorand-indexer daemon --algod-net $(cat ~/demo-node/algod.net) --algod-token $(cat ~/demo-node/algod.token) --genesis ~/demo-node/genesis.json --postgres "user=ubuntu password=password" >> ~/demo-indexer.log 2>&1 &
+
+# initialize application code
+#
+# here we use tealcut so that the application can initialize
+# the escrow at creation time.  tealcut works by partitioning
+# the escrow TEAL program into a prefix and a suffix, leaving
+# eight bytes to specify the application ID.
+
+# a sentinel value is required for the program to compile correctly
 SENTINEL=0x0000000000001040
 sed s/TMPL_APPID/${SENTINEL}/g < src/sovauc_escrow_tmpl.teal > tmp/sovauc_escrow_tmpl.teal
 goal clerk compile tmp/sovauc_escrow_tmpl.teal -o tmp/sovauc_escrow_tmpl.tealc
+
+# tell tealcut to cleave around the sentinel value
 EPREFIX=$(tealcut tmp/sovauc_escrow_tmpl.tealc ${SENTINEL} | grep sub0 | cut -f 2 -d ' ')
 ESUFFIX=$(tealcut tmp/sovauc_escrow_tmpl.tealc ${SENTINEL} b64 | grep sub1 | cut -f 2 -d ' ')
 ESUFFIXH=$(tealcut tmp/sovauc_escrow_tmpl.tealc ${SENTINEL} | grep hash1 | cut -f 2 -d ' ')
+
+# we now have the prefix and the suffix hash, which must be
+# written into the application code
+#
+# the suffix will be used later as an argument to the application
+# creation transaction
+mkdir build || true
 sed s/TMPL_EPREFIX/${EPREFIX}/g < src/sovauc_approve.teal | sed s/TMPL_ESUFFIXH/${ESUFFIXH}/g > build/sovauc_approve.teal
 sed s/TMPL_EPREFIX/${EPREFIX}/g < src/sovauc_clear.teal | sed s/TMPL_ESUFFIXH/${ESUFFIXH}/g > build/sovauc_clear.teal
 cp src/sovauc_escrow_tmpl.teal build/sovauc_escrow_tmpl.teal
 echo ${ESUFFIX} > build/escrow_suffix
 
 # initialize Algo balances
-
-goal node start
-
-nohup algorand-indexer daemon --algod-net $(cat ~/demo-node/algod.net) --algod-token $(cat ~/demo-node/algod.token) --genesis ~/demo-node/genesis.json --postgres "user=ubuntu password=password" >> ~/demo-indexer.log 2>&1 &
 
 SEED=$(goal account list | grep -v Unnamed | grep -v creator | head -n 1 | cut -f 2)
 
@@ -50,6 +66,8 @@ goal clerk send -a 100000000000 -f ${SEED} -t ${CREATOR}
 goal asset create --creator ${SELLER} --name sov --unitname sov --total $(echo "2^64 - 1" | bc)
 goal asset create --creator ${RESERVE} --name usdc --unitname usdc --total $(echo "2^64 - 1" | bc)
 
+# SOV_ID is the asset that is being sold at auction
+# USDC_ID is the asset that is used to bid
 SOV_ID=$(goal asset info --creator ${SELLER} --asset sov|grep 'Asset ID'|awk '{ print $3 }')
 USDC_ID=$(goal asset info --creator ${RESERVE} --asset usdc|grep 'Asset ID'|awk '{ print $3 }')
 

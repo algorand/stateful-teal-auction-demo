@@ -1,4 +1,7 @@
-These scripts assume that `goal` is in your $PATH and that $ALGORAND_DATA is set correctly.
+These scripts assume that
+- `goal` is in your $PATH
+- $ALGORAND_DATA is set correctly
+- $INDEXER_URL is set correctly ("localhost:8980" is the Indexer's default)
 
 # Non-interactive demo
 
