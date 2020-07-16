@@ -48,7 +48,10 @@ if [ "$3" == "" ]; then
 fi
 ESCROW_SRC=$3
 
-TEMPDIR="${DIR}/tmp/${TARGET}"
+# used in case this is called concurrently with the same address
+OFFSET=$(( (RANDOM) ))
+
+TEMPDIR="${DIR}/tmp/${OFFSET}/${TARGET}"
 
 rm -r ${TEMPDIR} || true
 mkdir -p ${TEMPDIR} || true

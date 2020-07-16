@@ -18,10 +18,14 @@ if [ "$1" == "" ]; then
 fi
 INPUT=$1
 
+# before opening an auction, save the current round to
+# make indexer queries (to pay out the auction) more
+# efficient
 HEAD_ROUND=$(goal node status | head -n 1 | cut -d ' ' -f 4)
 echo "$HEAD_ROUND" > "${DIR}/head-round"
 
 cp "${INPUT}" ${TEMPDIR}/opens4.stx
 
+# send the group transaction to the network
 cat ${TEMPDIR}/opens*.stx > ${TEMPDIR}/open.stx
 goal clerk rawsend -f ${TEMPDIR}/open.stx

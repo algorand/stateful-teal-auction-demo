@@ -37,7 +37,6 @@ if [ $DEADLINE -eq 0 ]; then
     exit 1
 fi
 
-# TODO parameterize out indexer URL
 ACCOUNTS=($(curl "${INDEXER_URL}/v2/transactions?address=${ESCROW}&asset-id=${USDC_ID}&min-round=${HEAD_RND}&max-round=${TAIL_RND}" | jq .transactions | jq "map(.sender)" | jq -r 'join(" ")'))
 
 RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.rc.ui + 0')

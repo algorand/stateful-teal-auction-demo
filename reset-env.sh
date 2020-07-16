@@ -15,6 +15,6 @@ cp ~/go-algorand/gen/devnet/*key ~/demo-node/sovnet-v1.0/
 
 # clear indexer state
 
-killall algorand-indexer
-dropdb ubuntu
+killall algorand-indexer || true
+dropdb ubuntu || true
 createdb

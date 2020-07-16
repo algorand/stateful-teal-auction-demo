@@ -17,6 +17,8 @@ export AUCTION_ROOT="$ROOT_DIR"
 
 APP_ID=$(cat $AUCTION_ROOT/refs/app)
 
+# continually run auctions until we've run all tranches
+
 TRANCHE_INDEX=$(goal app read --app-id ${APP_ID} --global --guess-format | jq '.ti.ui + 0')
 NUM_TRANCHES=$(goal app read --app-id ${APP_ID} --global --guess-format | jq .nt.ui)
 

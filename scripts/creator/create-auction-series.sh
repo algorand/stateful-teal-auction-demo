@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 # Intended to be used directly by the auction creator.
+#
+# This is called at the very beginning to initialize all
+# auction parameters.
+#
+# The resulting app ID must be given to bidders and constitutes
+# the root of trust (along with auction source code).
 
 set -ex
 set -o pipefail

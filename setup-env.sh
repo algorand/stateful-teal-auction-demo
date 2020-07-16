@@ -91,19 +91,23 @@ goal asset send --from ${SELLER} --to ${SELLER} -a 0 --assetid ${USDC_ID}
     wait
 )
 
-# populate filesystem with parameters
+# populate filesystem with parameters for subsequent scripts
 
 TEMPDIR=$(mktemp -d)
 rm "$HOME/last-auction" || true
 ln -s ${TEMPDIR} "$HOME/last-auction"
 
+# for an account to pass information to another
 mkdir "${TEMPDIR}/chan"
 
+# for posting public parameters
 mkdir "${TEMPDIR}/refs"
 
+# token IDs must be published to define the auction
 echo "${SOV_ID}" > "${TEMPDIR}/refs/sov"
 echo "${USDC_ID}" > "${TEMPDIR}/refs/usdc"
 
+# directories for individual accounts
 mkdir "${TEMPDIR}/creator"
 mkdir "${TEMPDIR}/seller"
 mkdir "${TEMPDIR}/reserve"
@@ -140,6 +144,9 @@ echo "${BOB}" > "${TEMPDIR}/bob/addr"
 echo "${CAROL}" > "${TEMPDIR}/carol/addr"
 echo "${DAVE}" > "${TEMPDIR}/dave/addr"
 
+# note that the auction scripts (along with the eventual
+# application ID) are necessary for establishing a root of
+# trust and thus should be posted publicly
 mkdir "${TEMPDIR}/refs/src"
 cp build/*.teal "${TEMPDIR}/refs/src"
 

@@ -46,11 +46,13 @@ AUCTION_DURATION=$(jq -r '.auction_duration' < "${DIR}/parameters.json")
 TRANCHE_INDEX=$(goal app read --app-id ${APP_ID} --global --guess-format | jq '.ti.ui + 0')
 ESCROW=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .es.tb)
 
-RECEIPTS_LEFT=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.rc.ui + 0')
-if [ 0 -lt $RECEIPTS_LEFT ]; then
+DEADLINE=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.ad.ui + 0')
+if [ $DEADLINE -ne 0 ]; then
     echo "Cannot start a new auction: the previous auction has not closed yet."
     exit 1
 fi
+
+# compute the tranche size according to the auction formula
 
 TRANCHE_SIZE=$INIT_TRANCHES_SIZE
 REM=0
@@ -71,6 +73,17 @@ if [ $LOOKBACK -le $TRANCHE_INDEX ]; then
 	REM=$(echo "(${FACTOR1} * ${FACTOR2}) % ${DIVISOR}" | bc)
     fi
 fi
+
+# create all transactions other than the transaction
+# where the seller funds the escrow
+#
+# the transactions (in group order) are:
+# 1. administrator -> escrow, to pay fees
+# 2. anyone (administrator here), to start the auction at $APP_ID
+# 3. escrow -> escrow: 0 bid assets, to opt in
+# 4. escrow -> escrow: 0 sale assets, to opt in
+# 5. seller -> escrow: X sale assets, to fund the auction
+#    (where X is determined by the auction formula)
 
 goal clerk send -o ${TEMPDIR}/openr0.tx -a 100000000 -f ${FROM} -t ${ESCROW}
 goal app call   -o ${TEMPDIR}/openr1.tx --app-id ${APP_ID} --from ${FROM} --app-arg int:${REM}

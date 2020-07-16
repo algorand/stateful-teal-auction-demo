@@ -68,6 +68,19 @@ Once all auctions have completed, clean up auction state with
 $ ./shutdown-auction-series.sh
 ```
 
+# Visualization
+
+To generate stats from the indexer, given an escrow account, run
+
+```
+$ ./statfile.sh <escrow-addr> <data-file1> <data-file2>
+```
+
+You can plot these stats in a file `<out>.pdf` with
+
+```
+$ python auction-plot.py --bidfile <data-file1> --salesfile <data-file2> --outfile <out>.pdf
+```
 
 # Communication requirements
 
