@@ -9,7 +9,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. >/dev/nul
 
 APP_ID=$(cat "${DIR}/app")
 
-DEADLINE=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .ad.ui)
+DEADLINE=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r '.ad.ui + 0')
 
 # TODO this assumes that blockchain timestamp is near local wall clock;
 # use block header timestamp instead for better accuracy

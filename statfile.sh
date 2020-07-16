@@ -3,6 +3,13 @@
 set -e
 set -o pipefail
 
+if [ -z "$AUCTION_ROOT" ]
+then
+    echo '$AUCTION_ROOT has not been set.'
+    echo 'Hint: run `export AUCTION_ROOT="$HOME/last-auction"`'
+    false
+fi
+
 APP_ID=$(cat "$AUCTION_ROOT/refs/app")
 USDC_ID=$(cat "$AUCTION_ROOT/refs/usdc")
 SOV_ID=$(cat "$AUCTION_ROOT/refs/sov")
