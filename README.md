@@ -1,7 +1,10 @@
 These scripts assume that
 - `goal` is in your $PATH
+- `algorand-indexer` is in your $PATH
 - $ALGORAND_DATA is set correctly
 - $INDEXER_URL is set correctly ("localhost:8980" is the Indexer's default)
+- `~/demo-node` contains an Algorand node with a consensus version that
+  supports stateful TEAL
 
 # Non-interactive demo
 
@@ -44,8 +47,8 @@ This application seeks to achieve the following properties:
 5. Once a bid is committed, the seller is guaranteed to be able
    to reclaim tokens exactly when it closes the tranche.
 6. A tranche will not be closed unless either all bids have been
-   paid out, or destroyed.
-7. A bid must be paid out if a bidder has opted into the bid token.
+   paid out or destroyed.
+7. A bid must be paid out if a bidder has opted into the sale token.
    A bid will only be destroyed if the bidder has not opted in.
    (Note that a bidder can temporarily delay an auction by
    wasting fees by opting in and out repeatedly).
@@ -169,11 +172,13 @@ $ ./shutdown-auction-series.sh
 
 # Visualization
 
-To generate stats from the indexer, given an escrow account, run
+To generate stats from the indexer, run
 
 ```
 $ ./statfile.sh <escrow-addr> <data-file1> <data-file2>
 ```
+
+Note that you'll need the address of the escrow account to do this.
 
 You can plot these stats in a file `<out>.pdf` with
 

@@ -43,9 +43,11 @@ TRANCHE_RAISED=$(goal app read --global --app-id ${APP_ID} | jq '.ar.ui + 0')
 TRANCHE_SUPPLY=$(goal app read --global --app-id ${APP_ID} | jq .as.ui)
 AUCTION_DEADLINE=$(goal app read --global --app-id ${APP_ID} | jq '.ad.ui + 0')
 RECEIPTS_LEFT=$(goal app read --global --app-id ${APP_ID} | jq '.rc.ui + 0')
+ESCROW=$(goal app read --app-id ${APP_ID} --global --guess-format | jq -r .es.tb)
 
 echo "Bid asset: ${BID_ID}"
 echo "Sale asset: ${SALE_ID}"
+echo "Escrow: ${ESCROW}"
 
 if [ $DEADLINE -eq 0 ]; then
     echo "State: READY"
