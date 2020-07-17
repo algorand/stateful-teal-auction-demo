@@ -91,7 +91,7 @@ If an auction is READY but no tranches remain, the auction may
 be deallocated and moved to TERMINATED by an application deletion
 transaction.
 
-# Interactive Demo
+# Interactive demo
 
 ## Environment setup and initialization
 
@@ -140,7 +140,7 @@ You may enter a bid on behalf of a particular user with
 $ "${AUCTION_ROOT}/<user>/scripts/enter-bid.sh" <amount>
 ```
 
-To input a round of bids from various bidders, distributed
+To input a round of bids from various bidders, distributed almost
 uniformly at random from a few values, use
 
 ```
