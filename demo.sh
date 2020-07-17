@@ -23,10 +23,7 @@ TRANCHE_INDEX=$(goal app read --app-id ${APP_ID} --global --guess-format | jq '.
 NUM_TRANCHES=$(goal app read --app-id ${APP_ID} --global --guess-format | jq .nt.ui)
 
 while [ $TRANCHE_INDEX -lt $NUM_TRANCHES ]; do
-    ./open-auction.sh
-    ./enter-various-bids.sh
-    ./wait-for-auction-close.sh
-    ./payout-auction.sh
+    ./demo-one-tranche.sh
     TRANCHE_INDEX=$(goal app read --app-id ${APP_ID} --global --guess-format | jq '.ti.ui + 0')
 done
 
